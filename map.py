@@ -20,7 +20,7 @@ class Map:
 
         self.cells = [[None for _ in range(self.size_x)] for _ in range(self.size_y)]
         self.randomFillMap()
-        # self.FillCountBombOutside()
+        self.FillCountBombOutside()
 
     def randomFillMap(self):
         for i in range(self.size_y):
@@ -41,7 +41,7 @@ class Map:
         result = 0
         for x in range(self.size_x):
             for y in range(self.size_y):
-                if self.cells[x][y].type == TypeCell.bomb:
+                if self.cells[y][x].type == TypeCell.bomb:
                     continue
 
                 if x - 1 >= 0 and y - 1 >= 0:
@@ -74,3 +74,4 @@ class Map:
                 else:
                     self.cells[y][x].value = result
                     self.cells[y][x].type = TypeCell.number
+                result = 0
