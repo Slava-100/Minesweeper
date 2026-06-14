@@ -75,3 +75,19 @@ class Map:
                     self.cells[y][x].value = result
                     self.cells[y][x].type = TypeCell.number
                 result = 0
+                
+    def play(self, index_x, index_y):
+        if self.cells[index_y][index_x].type == TypeCell.number:
+            self.cells[index_y][index_x].isOpen = True
+        
+        if self.cells[index_y][index_x].type == TypeCell.bomb:
+            self.cells[index_y][index_x].isOpen = True
+            print("Ой, ты попал в бомбу!")
+            input("")
+            self.randomFillMap()
+            self.FillCountBombOutside()
+
+        if self.cells[index_y][index_x].type == TypeCell.empty:
+            isEmpty = True
+            while isEmpty:
+                
