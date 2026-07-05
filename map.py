@@ -77,6 +77,13 @@ class Map:
                 result = 0
                 
     def play(self, index_x, index_y):
+        if index_x >= self.size_x or index_x < 0:
+            return
+        if index_y >= self.size_y or index_y < 0:
+            return
+        if self.cells[index_y][index_x].isOpen == True:
+            return
+        
         if self.cells[index_y][index_x].type == TypeCell.number:
             self.cells[index_y][index_x].isOpen = True
         
@@ -88,6 +95,15 @@ class Map:
             self.FillCountBombOutside()
 
         if self.cells[index_y][index_x].type == TypeCell.empty:
-            isEmpty = True
-            while isEmpty:
-                
+            self.playIsEmpty(index_x, index_y)
+    
+    def playIsEmpty(self, index_x, index_y):
+        self.cells[index_y][index_x].isOpen = True
+        self.play(index_x-1, index_y)       
+        self.play(index_x-1, index_y-1)                      
+        self.play(index_x, index_y-1)
+        self.play(index_x+1, index_y-1)
+        self.play(index_x+1, index_y)
+        self.play(index_x+1, index_y+1)
+        self.play(index_x, index_y+1)
+        self.play(index_x-1, index_y+1)
