@@ -1,7 +1,7 @@
 from cell import Cell, TypeCell
 import random
 from enum import Enum
-
+from state_play import StatePlay
 
 class Complexity(Enum):
     easy = (1,)
@@ -76,11 +76,22 @@ class Map:
                     self.cells[y][x].type = TypeCell.number
                 result = 0
                 
-    def play(self, index_x, index_y):
+    def play(self, index_x, index_y, state_play = StatePlay.default):
         if index_x >= self.size_x or index_x < 0:
             return
         if index_y >= self.size_y or index_y < 0:
             return
+    
+        if state_play == StatePlay.flag:
+            if self.cells[index_y][index_x].type == TypeCell.flag:
+                self.cells[index_y][index_x].isOpen = False
+                self.cells[index_y][index_x].type = TypeCell.empty
+            else:
+                if self.cells[index_y][index_x].isOpen == False:
+                    self.cells[index_y][index_x].isOpen = True
+                    self.cells[index_y][index_x].type = TypeCell.flag
+            return
+        
         if self.cells[index_y][index_x].isOpen == True:
             return
         

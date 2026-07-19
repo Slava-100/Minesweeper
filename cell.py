@@ -4,8 +4,8 @@ from enum import Enum
 class TypeCell(Enum):
     empty = (1,)
     number = (2,)
-    bomb = 3
-
+    bomb = (3,)
+    flag = 4
 
 class Cell:
     def __init__(self):
