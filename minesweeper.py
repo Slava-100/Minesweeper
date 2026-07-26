@@ -9,24 +9,10 @@ class Minesweeper:
         self.game_map = Map(complexity)
         self.start()
 
-    def showMap(self):
-        for row in self.game_map.cells:
-            for cell in row:
-                if cell.isOpen == True:
-                    if cell.type == TypeCell.number:
-                        print(cell.value, end=" ")
-                    elif cell.type == TypeCell.flag:
-                        print("!", end=" ")
-                    else:
-                        print(" ", end=" ")
-                else:
-                    print("*", end=" ")
-            print()
-
     def start(self):
         end = False 
         while end == False:
-            self.showMap()    
+            self.game_map.showMap()    
             if self.state_play == StatePlay.default:
                 xy = input("(Обычный ход) Введи координаты хода (x y):")
             else:
@@ -37,6 +23,8 @@ class Minesweeper:
                     self.state_play = StatePlay.default 
                 else:
                     self.state_play = StatePlay.flag
+            elif xy == "**":
+                self.game_map.openeed()
             else:
                 xy_array = xy.strip().split()
                 x = int(xy_array[0])

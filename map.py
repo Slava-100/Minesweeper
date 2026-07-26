@@ -18,11 +18,12 @@ class Map:
         else:
             self.size_x, self.size_y, self.count_bomb = 10, 10, 30
 
-        self.cells = [[None for _ in range(self.size_x)] for _ in range(self.size_y)]
+        self.cells = []
         self.randomFillMap()
         self.FillCountBombOutside()
 
     def randomFillMap(self):
+        self.cells = [[None for _ in range(self.size_x)] for _ in range(self.size_y)]
         for i in range(self.size_y):
             for j in range(self.size_x):
                 self.cells[i][j] = Cell()
@@ -75,7 +76,82 @@ class Map:
                     self.cells[y][x].value = result
                     self.cells[y][x].type = TypeCell.number
                 result = 0
+    
+    def openeed(self):
+        countFlag = 0
+        for x in range(self.size_x):
+            for y in range(self.size_y):
+                if self.cells[y][x].type != TypeCell.number:
+                    continue
+
+                if x - 1 >= 0 and y - 1 >= 0:
+                    if self.cells[y - 1][x - 1].type == TypeCell.flag:
+                        countFlag += 1
+                if y - 1 >= 0:
+                    if self.cells[y - 1][x].type == TypeCell.flag:
+                        countFlag += 1
+                if x + 1 <= self.size_x - 1 and y - 1 >= 0:
+                    if self.cells[y - 1][x + 1].type == TypeCell.flag:
+                        countFlag += 1
+                if x - 1 >= 0 and y + 1 <= self.size_y - 1:
+                    if self.cells[y + 1][x - 1].type == TypeCell.flag:
+                        countFlag += 1
+                if y + 1 <= self.size_y - 1:
+                    if self.cells[y + 1][x].type == TypeCell.flag:
+                        countFlag += 1
+                if x + 1 <= self.size_x - 1 and y + 1 <= self.size_y - 1:
+                    if self.cells[y + 1][x + 1].type == TypeCell.flag:
+                        countFlag += 1
+                if x - 1 >= 0:
+                    if self.cells[y][x - 1].type == TypeCell.flag:
+                        countFlag += 1
+                if x + 1 <= self.size_x - 1:
+                    if self.cells[y][x + 1].type == TypeCell.flag:
+                        countFlag += 1
                 
+                if countFlag != self.cells[y][x]:
+                    continue
+                else:
+                    if x - 1 >= 0 and y - 1 >= 0:
+                        if self.cells[y - 1][x - 1].isOpen == False:
+                            self.play(x, y)
+                    if y - 1 >= 0:
+                        if self.cells[y - 1][x].isOpen == False:
+                            self.play(x, y)
+                    if x + 1 <= self.size_x - 1 and y - 1 >= 0:
+                        if self.cells[y - 1][x + 1].isOpen == False:
+                            self.play(x, y)
+                    if x - 1 >= 0 and y + 1 <= self.size_y - 1:
+                        if self.cells[y + 1][x - 1].isOpen == False:
+                            self.play(x, y)
+                    if y + 1 <= self.size_y - 1:
+                        if self.cells[y + 1][x].isOpen == False:
+                            self.play(x, y)
+                    if x + 1 <= self.size_x - 1 and y + 1 <= self.size_y - 1:
+                        if self.cells[y + 1][x + 1].isOpen == False:
+                            self.play(x, y)
+                    if x - 1 >= 0:
+                        if self.cells[y][x - 1].isOpen == False:
+                            self.play(x, y)
+                    if x + 1 <= self.size_x - 1:
+                        if self.cells[y][x + 1].isOpen == False:
+                            self.play(x, y)
+        return
+                                
+    def showMap(self):
+          for row in self.cells:
+              for cell in row:
+                  if cell.isOpen == True:
+                      if cell.type == TypeCell.number:
+                          print(cell.value, end=" ")
+                      elif cell.type == TypeCell.flag:
+                          print("!", end=" ")
+                      else:
+                          print(" ", end=" ")
+                  else:
+                      print("*", end=" ")
+              print()     
+                    
     def play(self, index_x, index_y, state_play = StatePlay.default):
         if index_x >= self.size_x or index_x < 0:
             return
@@ -104,9 +180,11 @@ class Map:
             input("")
             self.randomFillMap()
             self.FillCountBombOutside()
+            return
 
         if self.cells[index_y][index_x].type == TypeCell.empty:
             self.playIsEmpty(index_x, index_y)
+            return
     
     def playIsEmpty(self, index_x, index_y):
         self.cells[index_y][index_x].isOpen = True
