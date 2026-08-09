@@ -78,12 +78,16 @@ class Map:
                 result = 0
     
     def openeed(self):
-        countFlag = 0
+     
         for x in range(self.size_x):
             for y in range(self.size_y):
+                countFlag = 0
                 if self.cells[y][x].type != TypeCell.number:
                     continue
 
+                if self.cells[y][x].isOpen == False:
+                    continue
+                
                 if x - 1 >= 0 and y - 1 >= 0:
                     if self.cells[y - 1][x - 1].type == TypeCell.flag:
                         countFlag += 1
@@ -109,33 +113,33 @@ class Map:
                     if self.cells[y][x + 1].type == TypeCell.flag:
                         countFlag += 1
                 
-                if countFlag != self.cells[y][x]:
+                if countFlag != self.cells[y][x].value:
                     continue
                 else:
                     if x - 1 >= 0 and y - 1 >= 0:
                         if self.cells[y - 1][x - 1].isOpen == False:
-                            self.play(x, y)
+                            self.play(x - 1, y - 1)
                     if y - 1 >= 0:
                         if self.cells[y - 1][x].isOpen == False:
-                            self.play(x, y)
+                            self.play(x, y - 1)
                     if x + 1 <= self.size_x - 1 and y - 1 >= 0:
                         if self.cells[y - 1][x + 1].isOpen == False:
-                            self.play(x, y)
+                            self.play(x + 1, y - 1)
                     if x - 1 >= 0 and y + 1 <= self.size_y - 1:
                         if self.cells[y + 1][x - 1].isOpen == False:
-                            self.play(x, y)
+                            self.play(x - 1, y + 1)
                     if y + 1 <= self.size_y - 1:
                         if self.cells[y + 1][x].isOpen == False:
-                            self.play(x, y)
+                            self.play(x, y + 1)
                     if x + 1 <= self.size_x - 1 and y + 1 <= self.size_y - 1:
                         if self.cells[y + 1][x + 1].isOpen == False:
-                            self.play(x, y)
+                            self.play(x + 1, y + 1)
                     if x - 1 >= 0:
                         if self.cells[y][x - 1].isOpen == False:
-                            self.play(x, y)
+                            self.play(x - 1, y)
                     if x + 1 <= self.size_x - 1:
                         if self.cells[y][x + 1].isOpen == False:
-                            self.play(x, y)
+                            self.play(x + 1, y)
         return
                                 
     def showMap(self):
